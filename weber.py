@@ -3,23 +3,35 @@ import random
 import math
 import sys
 
-width = 1200 
-height = 800
+WIDTH = 1200 
+HEIGHT = 800
 numDots = 100
-black = 0, 0, 0
-tick = 2
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 class Dot():
     def __init__(self):
-        self.x = random.randint(0, width)
-        self.y = random.randint(0, height)
+        self.x = random.randint(0, WIDTH)
+        self.y = random.randint(0, HEIGHT)
         self.r = 1 
     
+"""
 class Square():
-    def __init__(self, dots):
-        self.dots = dots
+    def __init__(self, x, y):
+        self.x
+        self.y
+"""
 
-def draw_dots(numDots, surface):
+def draw_squares(screen):
+    squareone = pygame.rect.Rect(0, 0, WIDTH / 2, HEIGHT)
+    squaretwo = pygame.rect.Rect(WIDTH / 2, 0, WIDTH / 2, HEIGHT) 
+    squares = [squareone, squaretwo] 
+
+    pygame.draw.rect(screen, BLACK, squareone, 1)
+    pygame.draw.rect(screen, BLACK, squaretwo, 1)
+    return squares
+
+def draw_dots(numDots, square):
     dots = []
     while len(dots) < numDots:
         new = Dot()
@@ -30,8 +42,12 @@ def draw_dots(numDots, surface):
                 continue
 
         dots.append(new)
-        pygame.draw.circle(surface, black, (new.x, new.y), new.r, 0)
+        pygame.draw.circle(square, BLACK, (new.x, new.y), new.r, 0)
         pygame.display.update()
+
+def weber(squares):
+    draw_dots(numDots, squares[0])
+    draw_dots(numDots, squares[1])
 
     pygame.event.clear()
     done = False
@@ -51,13 +67,14 @@ def draw_dots(numDots, surface):
 if __name__ == '__main__':
     pygame.init()
 
-    screen = pygame.display.set_mode([width, height])
+    screen = pygame.display.set_mode([WIDTH, HEIGHT])
     screen.fill((255, 255, 255))
 
     pygame.display.set_caption("Weber's Law on Vision")
 
-    squares = []
-    draw_dots(numDots, screen)
+    squares = draw_squares(screen)
+    
+    weber(squares)
 
     while True:
         for event in pygame.event.get():
